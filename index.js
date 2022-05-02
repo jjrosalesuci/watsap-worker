@@ -2,6 +2,10 @@ const qrcode = require('qrcode-terminal');
 const {Client, LocalAuth, NoAuth} = require('whatsapp-web.js');
 const messagesRepository = require("./services/messagesRepository");
 
+const config = {
+    timeRange : '1'
+};
+
 const client = new Client({
     authStrategy: new LocalAuth()
     // authStrategy: new NoAuth()
@@ -14,6 +18,12 @@ client.on('qr', qr => {
 client.on('ready', () => {
     console.log('Client is ready!');
     setInterval(() => {
+        const today = new Date();
+        const second =  `${today.getSeconds()}`;
+        if (second[0] != config.timeRange) {
+            return
+        }
+        console.log('Ejecution start: ', second);
         messagesRepository.getMessage().then((msg) => {
             console.log(msg);
             if (!msg.id) return;
@@ -25,19 +35,17 @@ client.on('ready', () => {
                     ...msg,
                     status: "DELIVERED"
                 }
-                messagesRepository.updateMessage(newMessage).then(r => {
-                });
+                messagesRepository.updateMessage(newMessage).then(r => {});
             }).catch((err) => {
                 console.log(err)
                 let newMessage = {
                     ...msg,
                     status: "ERROR"
                 }
-                messagesRepository.updateMessage(newMessage).then(r => {
-                })
-            })
+                messagesRepository.updateMessage(newMessage).then(r => {});
+            });
         });
-    }, 10000);
+    }, 2000);
 });
 
 
