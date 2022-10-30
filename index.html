@@ -1,0 +1,28 @@
+<html>
+<head>
+  <title>Watsap Sender</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+<style>
+    .qr {
+        width: 300px;
+        height: 300px;
+        display: flex;
+        margin: 0 auto;
+    }
+</style>
+
+</head>
+<body>
+    <img src='/qr?cache=' id='myimage' class="qr" />
+</body>
+<script>
+
+setInterval(()=>{
+   path = '/qr?cache='; 
+   imageObject = document.getElementById('myimage');
+   imageObject.src = path + (new Date()).getTime();
+},300)
+
+ </script>
+</html>
