@@ -49,7 +49,7 @@ client.on('ready', () => {
                 messagesRepository.updateMessage(newMessage).then(r => {});
             });
         });
-    }, 2000); 
+    }, 500); 
 });
 
 
@@ -80,6 +80,8 @@ app.get('/init', (req, res) => {
 app.get('/stop', (req, res) => {
     fs.unlinkSync(path.join(__dirname+'/qr.svg'));
     client.destroy();
+    clearInterval(interval);
+    interval = 0; 
     res.send('stop')
 })
 
