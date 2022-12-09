@@ -13,7 +13,6 @@ const client = new Client({
 });
 
 client.on('qr', qrsata => {
-    // qrcode.generate(qr, {small: true});s
     var qr_svg = qr.image(qrsata, { type: 'svg' });
     qr_svg.pipe(require('fs').createWriteStream('qr.svg'));
     console.log('new qr');
@@ -32,7 +31,7 @@ client.on('ready', () => {
             const text = msg.message;
 
             const chatId = number.substring(1) + "@c.us";
-            const media = MessageMedia.fromFilePath(`${__dirname}/promo.jpeg`);
+            const media = MessageMedia.fromFilePath(`${__dirname}/promo2.jpeg`);
 
             client.sendMessage(chatId, media, {caption: text}).then(r => {
                 let newMessage = {
@@ -42,11 +41,11 @@ client.on('ready', () => {
                 messagesRepository.updateMessage(newMessage).then(r => {});
             }).catch((err) => {
                 console.log(err)
-                let newMessage = {
+                /* let newMessage = {
                     ...msg,
                     status: "ERROR"
                 }
-                messagesRepository.updateMessage(newMessage).then(r => {});
+                messagesRepository.updateMessage(newMessage).then(r => {}); */
             });
         });
     }, 500); 
