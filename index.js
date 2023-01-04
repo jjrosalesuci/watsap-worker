@@ -31,7 +31,7 @@ client.on('ready', () => {
             const text = msg.message;
 
             const chatId = number.substring(1) + "@c.us";
-            const media = MessageMedia.fromFilePath(`${__dirname}/promo2.jpeg`);
+            const media = MessageMedia.fromFilePath(`${__dirname}/promo5.jpeg`);
 
             client.sendMessage(chatId, media, {caption: text}).then(r => {
                 let newMessage = {
