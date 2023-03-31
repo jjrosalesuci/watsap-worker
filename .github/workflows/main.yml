@@ -29,7 +29,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         port: ${{ secrets.PORT }}
         password: ${{ secrets.PASSWORD }}
-        script: cd /home/jjrosales/watsapsender.com/web/ && npm install --loglevel=error && npm run build
+        script: cd /home/jjrosales/watsapsender.com/web/ && npm install --loglevel=error
 
     - name: Executing remote deploy
       uses: appleboy/ssh-action@master
