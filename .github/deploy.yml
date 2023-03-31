@@ -1,0 +1,41 @@
+name: Deploy In Production
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Copy file via scp
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.HOST_PROD }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.PORT }}
+        password: ${{ secrets.PASSWORD }}
+        source: "."
+        target: "/home/jjrosales/watsapsender.com/web"
+
+    - name: Executing remote install and build
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_PROD }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.PORT }}
+        password: ${{ secrets.PASSWORD }}
+        script: cd /home/jjrosales/watsapsender.com/web/ && npm install --loglevel=error && npm run build
+
+    - name: Executing remote deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST_PROD }}
+        username: ${{ secrets.USERNAME }}
+        port: ${{ secrets.PORT }}
+        password: ${{ secrets.PASSWORD }}
+        script: cd /home/jjrosales/watsapsender.com/web/ && pm2 stop ws-sender && pm2 start ecosystem.config.js --env production
