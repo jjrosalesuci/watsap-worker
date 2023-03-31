@@ -10,6 +10,9 @@ const messagesRepository = require("./services/messagesRepository");
 
 const client = new Client({
     authStrategy: new NoAuth(),
+    puppeteer: {
+		args: ['--no-sandbox'],
+	}
 });
 
 client.on('qr', qrsata => {
