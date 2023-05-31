@@ -31,7 +31,7 @@ client.on('ready', () => {
             const text = msg.message;
 
             const chatId = number.substring(1) + "@c.us";
-            const media = MessageMedia.fromFilePath(`${__dirname}/promo8.jpeg`);
+            const media = MessageMedia.fromFilePath(`${__dirname}/promo9.jpeg`);
 
             client.sendMessage(chatId, media, {caption: text}).then(r => {
                 let newMessage = {
@@ -60,7 +60,7 @@ client.on('disconnected', ()=> {
 
 
 const app = express()
-const port = 3009
+const port = 3000
 
 
 app.get('/', (req, res) => {
