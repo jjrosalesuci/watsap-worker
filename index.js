@@ -53,7 +53,7 @@ client.on('ready', () => {
 
             });
         });
-    }, 500); 
+    }, 1000); 
 });
 
 
@@ -91,7 +91,7 @@ app.get('/stop', (req, res) => {
         clearInterval(interval);
         interval = 0; 
         res.send('stop')
-    }   
+    }
 })
 
 app.listen(port, () => {
