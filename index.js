@@ -10,6 +10,9 @@ const messagesRepository = require("./services/messagesRepository");
 
 const client = new Client({
     authStrategy: new NoAuth(),
+    puppeteer: {
+		args: ['--no-sandbox'],
+	}
 });
 
 client.on('qr', qrsata => {
@@ -31,7 +34,7 @@ client.on('ready', () => {
             const text = msg.message;
 
             const chatId = number.substring(1) + "@c.us";
-            const media = MessageMedia.fromFilePath(`${__dirname}/promo11.jpeg`);
+            const media = MessageMedia.fromFilePath(`${__dirname}/promo14.jpeg`);
 
             client.sendMessage(chatId, media, {caption: text}).then(r => {
                 let newMessage = {
@@ -60,7 +63,7 @@ client.on('disconnected', ()=> {
 
 
 const app = express()
-const port = 3000
+const port = 3009
 
 
 app.get('/', (req, res) => {

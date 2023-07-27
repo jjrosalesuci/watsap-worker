@@ -1,6 +1,6 @@
 module.exports = {
     apps : [{
-        name: "watsapsender",
+        name: "ws-sender",
         script: "./index.js",
         env: {
             NODE_ENV: "development",
