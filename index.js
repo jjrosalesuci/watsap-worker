@@ -50,7 +50,7 @@ client.on('ready', () => {
                     status: "ERROR"
                 }
                 messagesRepository.updateMessage(newMessage).then(r => {}); */
-                
+
             });
         });
     }, 500); 
@@ -82,11 +82,16 @@ app.get('/init', (req, res) => {
 })
 
 app.get('/stop', (req, res) => {
-    fs.unlinkSync(path.join(__dirname+'/qr.svg'));
-    client.destroy();
-    clearInterval(interval);
-    interval = 0; 
-    res.send('stop')
+    try {
+        fs.unlinkSync(path.join(__dirname+'/qr.svg'));
+    } catch (err) {
+        console.log('Error stoping', err);
+    } finally {
+        client.destroy();
+        clearInterval(interval);
+        interval = 0; 
+        res.send('stop')
+    }   
 })
 
 app.listen(port, () => {
