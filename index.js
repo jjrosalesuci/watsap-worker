@@ -36,7 +36,7 @@ client.on('ready', () => {
             const chatId = number.substring(1) + "@c.us";
             const media = MessageMedia.fromFilePath(`${__dirname}/promo14.jpeg`);
 
-            
+
             client.sendMessage(chatId, media, {caption: text}).then(r => {
                 let newMessage = {
                     ...msg,
@@ -50,6 +50,7 @@ client.on('ready', () => {
                     status: "ERROR"
                 }
                 messagesRepository.updateMessage(newMessage).then(r => {}); */
+                
             });
         });
     }, 500); 
