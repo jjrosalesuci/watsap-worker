@@ -16,7 +16,7 @@ const client = new Client({
 });
 
 client.on('qr', qrsata => {
-    var qr_svg = qr.image(qrsata, { type: 'svg' });
+    const qr_svg = qr.image(qrsata, {type: 'svg'});
     qr_svg.pipe(require('fs').createWriteStream('qr.svg'));
     console.log('new qr');
 });
@@ -77,8 +77,9 @@ app.get('/qr', (req, res) => {
 });
 
 app.get('/init', (req, res) => {
-    client.initialize();
-    res.send('start')
+    client.initialize().then(()=>{
+        res.send('start')
+    });
 })
 
 app.get('/stop', (req, res) => {
