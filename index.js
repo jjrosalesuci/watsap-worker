@@ -77,9 +77,8 @@ app.get('/qr', (req, res) => {
 });
 
 app.get('/init', (req, res) => {
-    client.initialize().then(()=>{
-        res.send('start')
-    });
+    client.initialize().then(()=>{});
+    res.send('start')
 })
 
 app.get('/stop', (req, res) => {
