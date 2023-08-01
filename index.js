@@ -1,4 +1,6 @@
 const express = require('express');
+const { GetObjectCommand, S3Client } = require ("@aws-sdk/client-s3");
+
 const path = require('path');
 const fs = require('fs');
 
@@ -15,6 +17,8 @@ const client = new Client({
 	}
 });
 
+const clientId = null;
+
 client.on('qr', qrsata => {
     const qr_svg = qr.image(qrsata, {type: 'svg'});
     qr_svg.pipe(require('fs').createWriteStream('qr.svg'));
@@ -22,11 +26,37 @@ client.on('qr', qrsata => {
 });
 
 let interval = null;
+
+const downloadFile = () => {
+    const s3client = new S3Client({
+        region: "us-east-1",
+        credentials: {
+            accessKeyId: 'AKIAVLXMP2ZYUBQCOTLX',
+            secretAccessKey: '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'
+        }
+    });
+
+    const command = new GetObjectCommand({
+        Bucket: "app-marketing-bucket",
+        Key: `${clientId}.jpeg`,
+        Body: blob,
+    });
+
+    try {
+        const response = s3client.send(command);
+        console.log("descargada cargada correctamente.");
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 client.on('ready', () => {
      console.log('Client is ready!');
+     downloadFile();
+
      interval =  setInterval(() => {
         console.log('Ejecution start');
-
+        
         messagesRepository.getMessage().then((msg) => {
             console.log(msg);
             if (!msg.id) return;
@@ -36,7 +66,6 @@ client.on('ready', () => {
             const chatId = number.substring(1) + "@c.us";
             const media = MessageMedia.fromFilePath(`${__dirname}/promo14.jpeg`);
 
-
             client.sendMessage(chatId, media, {caption: text}).then(r => {
                 let newMessage = {
                     ...msg,
@@ -44,13 +73,7 @@ client.on('ready', () => {
                 }
                 messagesRepository.updateMessage(newMessage).then(r => {});
             }).catch((err) => {
-                console.log(err)
-                /* let newMessage = {
-                    ...msg,
-                    status: "ERROR"
-                }
-                messagesRepository.updateMessage(newMessage).then(r => {}); */
-
+                console.log(err);
             });
         });
     }, 1000); 
@@ -77,6 +100,9 @@ app.get('/qr', (req, res) => {
 });
 
 app.get('/init', (req, res) => {
+    clientId = req.query.clientId;
+    console.log('clientId', clientId);
+
     client.initialize().then(()=>{});
     res.send('start')
 })
