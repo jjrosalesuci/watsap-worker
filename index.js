@@ -1,4 +1,6 @@
 const express = require('express');
+const { GetObjectCommand, S3Client } = require ("@aws-sdk/client-s3");
+
 const path = require('path');
 const fs = require('fs');
 const { GetObjectCommand, S3Client } = require ("@aws-sdk/client-s3");
