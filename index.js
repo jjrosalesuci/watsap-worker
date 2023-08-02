@@ -110,7 +110,6 @@ app.get('/init', async (req, res) => {
     res.send('start');
 })
 
-
 app.get('/stop', (req, res) => {
     try {
         fs.unlinkSync(path.join(__dirname+'/qr.svg'));
