@@ -27,6 +27,7 @@ let clientId = null;
 
 // Image
 const downloadFile = async (clientId) => {
+    console.log('dowload image for clientId', clientId);
     const s3Client = new S3Client({
         region: "us-east-1",
         credentials: {
@@ -67,6 +68,8 @@ client.on('ready', () => {
             const text = msg.message;
 
             const chatId = number.substring(1) + "@c.us";
+
+            console.log('send media for clientId', clientId);
             const media = MessageMedia.fromFilePath(`${__dirname}/${clientId}.jpeg`);
 
             await client.sendMessage(chatId, media, {caption: text}).then(r => {
@@ -105,6 +108,7 @@ app.get('/qr', (req, res) => {
 
 app.get('/init', async (req, res) => {
     clientId = req.query.clientId;
+    console.log('init clientId', clientId);
     await downloadFile(clientId);
     client.initialize().then(() => {});
     res.send('start');
@@ -113,6 +117,7 @@ app.get('/init', async (req, res) => {
 
 app.get('/stop', (req, res) => {
     try {
+        clientId = null;
         fs.unlinkSync(path.join(__dirname+'/qr.svg'));
     } catch (err) {
         console.log('Error stoping', err);
