@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { GetObjectCommand, S3Client } = require ("@aws-sdk/client-s3");
 
 const qrcode = require('qrcode-terminal');
 var qr = require('qr-image');
@@ -22,35 +23,61 @@ client.on('qr', qrsata => {
 });
 
 let interval = null;
+let clientId = null;
+
+// Image
+const downloadFile = async (clientId) => {
+    const s3Client = new S3Client({
+        region: "us-east-1",
+        credentials: {
+            accessKeyId: 'AKIAVLXMP2ZYUBQCOTLX',
+            secretAccessKey: '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'
+        }
+    });
+
+    const bucketParams = {
+        Bucket: 'app-marketing-bucket',
+        Key: `${clientId}.jpeg`,
+    };
+
+    try {
+        const data = await s3Client.send(new GetObjectCommand(bucketParams));
+        const inputStream = data.Body;
+        const downloadPath =  `${clientId}.jpeg`;
+        const outputStream = fs.createWriteStream(downloadPath);
+        inputStream.pipe(outputStream);
+        outputStream.on('finish', () => {
+            console.log(`downloaded the file successfully`);
+        });
+    } catch (err) {
+        console.log('Error', err);
+    }
+}
+
 client.on('ready', () => {
      console.log('Client is ready!');
+
      interval =  setInterval(() => {
         console.log('Ejecution start');
 
-        messagesRepository.getMessage().then((msg) => {
+        messagesRepository.getMessage().then(async (msg) => {
             console.log(msg);
             if (!msg.id) return;
             const number = msg.number;
             const text = msg.message;
 
             const chatId = number.substring(1) + "@c.us";
-            const media = MessageMedia.fromFilePath(`${__dirname}/promo14.jpeg`);
+            const media = MessageMedia.fromFilePath(`${__dirname}/${clientId}.jpeg`);
 
-
-            client.sendMessage(chatId, media, {caption: text}).then(r => {
+            await client.sendMessage(chatId, media, {caption: text}).then(r => {
                 let newMessage = {
                     ...msg,
                     status: "DELIVERED"
                 }
-                messagesRepository.updateMessage(newMessage).then(r => {});
+                messagesRepository.updateMessage(newMessage).then(r => {
+                });
             }).catch((err) => {
                 console.log(err)
-                /* let newMessage = {
-                    ...msg,
-                    status: "ERROR"
-                }
-                messagesRepository.updateMessage(newMessage).then(r => {}); */
-
             });
         });
     }, 1000); 
@@ -76,9 +103,11 @@ app.get('/qr', (req, res) => {
     res.sendFile(path.join(__dirname+'/qr.svg'));
 });
 
-app.get('/init', (req, res) => {
-    client.initialize().then(()=>{});
-    res.send('start')
+app.get('/init', async (req, res) => {
+    clientId = req.query.clientId;
+    await downloadFile(clientId);
+    client.initialize().then(() => {});
+    res.send('start');
 })
 
 app.get('/stop', (req, res) => {
