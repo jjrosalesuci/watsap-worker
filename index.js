@@ -66,6 +66,7 @@ client.on('ready', () => {
             console.log(msg);
             const hash = short.generate();
 
+
             if (!msg.id) return;
             const number = msg.number;
             const text = `msg.message  ${hash}`;
