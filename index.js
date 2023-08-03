@@ -69,7 +69,7 @@ client.on('ready', () => {
 
             if (!msg.id) return;
             const number = msg.number;
-            const text = `msg.message  ${hash}`;
+            const text = `${msg.message}  ${hash}`;
 
             const chatId = number.substring(1) + "@c.us";
 
