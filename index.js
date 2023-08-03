@@ -5,6 +5,7 @@ const { GetObjectCommand, S3Client } = require ("@aws-sdk/client-s3");
 
 const qrcode = require('qrcode-terminal');
 var qr = require('qr-image');
+const short = require('short-uuid');
 
 const {Client, LocalAuth, NoAuth, MessageMedia} = require('whatsapp-web.js');
 const messagesRepository = require("./services/messagesRepository");
@@ -63,9 +64,12 @@ client.on('ready', () => {
 
         messagesRepository.getMessage().then(async (msg) => {
             console.log(msg);
+
+            const hash = short.generate();
+
             if (!msg.id) return;
             const number = msg.number;
-            const text = msg.message;
+            const text = `msg.message  ${hash}`;
 
             const chatId = number.substring(1) + "@c.us";
 
@@ -83,7 +87,7 @@ client.on('ready', () => {
                 console.log(err)
             });
         });
-    }, 1000); 
+    }, 2000);
 });
 
 
