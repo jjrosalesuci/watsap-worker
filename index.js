@@ -64,7 +64,6 @@ client.on('ready', () => {
 
         messagesRepository.getMessage().then(async (msg) => {
             console.log(msg);
-
             const hash = short.generate();
 
             if (!msg.id) return;
