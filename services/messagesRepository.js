@@ -7,7 +7,7 @@ const getMessage = () => {
     return new Promise((resolve, reject) => {
         const config = {
             method: 'get',
-            url: 'http://127.0.0.1:3002/whatsapp/pending',
+            url: 'http://mifierro.com:3002/whatsapp/pending',
             headers: {
                 'token': 'JCBCDHVYDGFYEe123'
             }
@@ -27,7 +27,7 @@ const updateMessage = (data) => {
     const body = JSON.stringify(data);
     const config = {
         method: 'put',
-        url: 'http://127.0.0.1:3002/whatsapp',
+        url: 'http://mifierro.com:3002/whatsapp',
         headers: {
             'token': 'JCBCDHVYDGFYEe123',
             'Content-Type': 'application/json'
