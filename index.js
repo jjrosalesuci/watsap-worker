@@ -119,14 +119,20 @@ app.get('/init', async (req, res) => {
 })
 
 
-app.get('/stop', (req, res) => {
+app.get('/stop', async (req, res) => {
     try {
         clientId = null;
-        fs.unlinkSync(path.join(__dirname+'/qr.svg'));
+        if (client) {
+            const state =  await client.getState();
+            console.log('state', state);
+            if (state == "CONNECTED") {
+                client.destroy();
+            }
+            fs.unlinkSync(path.join(__dirname+'/qr.svg'));
+        }
     } catch (err) {
         console.log('Error stoping', err);
     } finally {
-        client.destroy();
         clearInterval(interval);
         interval = 0; 
         res.send('stop')
