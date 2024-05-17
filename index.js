@@ -13,9 +13,10 @@ const messagesRepository = require("./services/messagesRepository");
 // const wwebVersion = '2.2407.3';
 const wwebVersion = '2.2412.54';
 const client = new Client({
-    authStrategy: new LocalAuth({
+    /*authStrategy: new LocalAuth({
         dataPath: 'weblocal'
-    }), // your authstrategy here
+    }),*/
+    authStrategy: new NoAuth(),
     puppeteer: {
       headless: true , args: ['--no-sandbox', '--disable-setuid-sandbox'],
     },
