@@ -10,12 +10,15 @@ const short = require('short-uuid');
 const {Client, LocalAuth, NoAuth, MessageMedia} = require('whatsapp-web.js');
 const messagesRepository = require("./services/messagesRepository");
 
-const wwebVersion = '2.2407.3';
+// const wwebVersion = '2.2407.3';
+const wwebVersion = '2.2412.54';
 const client = new Client({
-    authStrategy: new NoAuth(),
+    authStrategy: new LocalAuth({
+        dataPath: 'weblocal'
+    }), // your authstrategy here
     puppeteer: {
-		args: ['--no-sandbox'],
-	},
+      headless: true , args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    },
     webVersionCache: {
         type: 'remote',
         remotePath: `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/${wwebVersion}.html`,
