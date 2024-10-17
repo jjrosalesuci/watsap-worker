@@ -95,8 +95,10 @@ client.on('ready', () => {
             }).catch((err) => {
                 console.log(err)
             });
-        });
-    }, 2000);
+        }).catch((err)=>{
+            console.log(err, 'Error connecting to db')
+        })
+    }, 3000);
 });
 
 
